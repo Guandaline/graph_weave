@@ -1,0 +1,83 @@
+# settings.toml
+
+# ==========================================
+#  Default Settings (Applied to All Envs)
+# ==========================================
+[default]
+app_name = "graph_weave"
+log_level = "INFO"
+
+# --- Observability Configuration ---
+[default.observability]
+enabled = true
+tracing_enabled = true
+otlp_endpoint = "localhost:4317"
+exporter_port = 9100
+
+[default.observability.metrics]
+enabled = true
+
+# --- Logging Configuration ---
+[default.logging]
+level = "INFO"
+serialize = false
+
+[default.logging.third_party_log_levels]
+httpx = "INFO"
+httpcore = "INFO"
+
+# --- Data Store Configuration ---
+[default.store]
+  [default.store.graph]
+  # Config for Neo4jStoreProvider
+  uri = "bolt://localhost:7687"
+  user = "neo4j"  
+  password = "password"
+  database = "neo4j"
+
+  [default.store.vector]
+  # Config for WeaviateStore
+  url = "http://localhost:8080"
+  class_name = "RAGDocument"
+
+# --- Resilience Patterns ---
+[default.resilience]
+  [default.resilience.retry]
+  enabled = true
+    [default.resilience.retry.default_policy]
+    attempts = 3
+    wait_min_seconds = 0.5
+    wait_max_seconds = 5.0
+    backoff = 2.0
+    exceptions = ["Exception"]
+
+# --- Security Configuration ---
+[default.security]
+  [default.security.secrets]
+  backend = "env"
+
+# ==========================================
+#  Development Environment Overrides
+# ==========================================
+[development]
+log_level = "DEBUG"
+
+[development.logging]
+serialize = false
+
+# ==========================================
+#  Production Environment Overrides
+# ==========================================
+[production]
+log_level = "INFO"
+
+[production.logging]
+serialize = true
+
+[production.store]
+  [production.store.graph]
+  uri = "${env.NEO4J_URI}"
+  password = "${env.NEO4J_PASSWORD}"
+
+  [production.store.vector]
+  url = "${env.WEAVIATE_URL}" 

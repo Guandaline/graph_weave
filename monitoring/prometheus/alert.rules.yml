@@ -1,0 +1,29 @@
+groups:
+- name: GraphRules
+  rules:
+  - alert: HighErrorRate
+    expr: sum(rate(http_requests_total{job="graph", status_code=~"5.."}[2m])) / sum(rate(http_requests_total{job="graph"}[2m])) > 0.05
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High HTTP Error Rate on {{ $labels.job }}"
+      description: "More than 5% of requests are failing with 5xx errors for the last minute."
+
+  - alert: HighRequestLatency
+    expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job="graph"}[5m])) by (le)) > 0.8
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High Request Latency on {{ $labels.job }}"
+      description: "The 95th percentile request latency is above 0.8s for the last 2 minutes."
+
+  - alert: APIIsDown
+    expr: up{job="graph"} == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "API {{ $labels.instance }} is down."
+      description: "Prometheus could not scrape metrics from the API for over a minute."

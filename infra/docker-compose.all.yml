@@ -1,0 +1,20 @@
+# infra/docker-compose.all.yml
+# File that aggregates ALL modular infrastructure services
+# using the 'include' directive.
+
+# List of all modular docker-compose files to be included.
+# Paths are relative to THIS file (infra/docker-compose.all.yml).
+include:
+  - ./graph/docker-compose.yml
+  - ./vector/docker-compose.yml
+
+
+# Defines the network that will be shared by all included services
+# and by the main application (which will include this file).
+networks:
+  graph_network:
+    driver: bridge
+    name: graph_network # Explicit name for the network
+
+# It is not necessary to define 'services' or 'volumes' here, as they will come
+# from the included files. Docker Compose merges the definitions.
