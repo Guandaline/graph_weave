@@ -37,4 +37,4 @@ This pattern will be applied to all layers of the RAG system, from the data inge
     * **Learning Curve:** New developers joining the project will need to understand the architectural patterns and abstractions before being fully productive.
 
 * **Neutral/Other:**
-    * **Code Naming:** The use of terms like "Fortify" and "nala" will be kept internal to the project's infrastructure layer to avoid confusion with domain-specific logic.
+    * **Code Naming:** The use of terms like "Fortify" and "graph" will be kept internal to the project's infrastructure layer to avoid confusion with domain-specific logic.

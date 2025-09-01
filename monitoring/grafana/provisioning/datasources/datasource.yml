@@ -1,0 +1,9 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    # 'prometheus:9090' funciona porque os containers estão na mesma rede do docker-compose
+    url: http://prometheus:9090
+    isDefault: true
