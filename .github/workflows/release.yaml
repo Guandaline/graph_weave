@@ -1,0 +1,64 @@
+# Workflow Name
+name: 📦 Release
+
+# Trigger: Executes when a workflow named "Run Tests" completes successfully.
+# IMPORTANT: The workflow name "Run Tests" MUST exactly match the 'name:' field
+#            in your ci.yml file (or whichever workflow runs the tests).
+on:
+  push:
+    branches: # Optional: Trigger only if the completed test workflow ran on 'main'
+      - main
+
+jobs:
+  release:
+    name: 📦 Create Release
+    runs-on: ubuntu-latest
+
+    # Permissions required for semantic-release:
+    #   contents: write - To commit version bump, push tags, create GitHub Release.
+    #   packages: write - Optional: If you publish packages to GitHub Packages.
+    permissions:
+      contents: write
+      packages: write # Add or remove based on your needs
+
+    steps:
+      # 1. Checkout the specific code commit tested by the triggering workflow
+      - name: ⬇️ Checkout code
+        uses: actions/checkout@v5
+        with:
+          # Checkout the exact commit SHA from the completed workflow run
+          # ref: ${{ github.event.workflow_run.head_sha }}
+          # fetch-depth: 0 is REQUIRED for semantic-release to analyze commit history
+          fetch-depth: 0
+          clean: false 
+
+      # 2. Set up Python environment
+      - name: 🐍 Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3. Install Poetry using the recommended method
+      - name: ጫ Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+
+      # 4. Add Poetry executable to the PATH for subsequent steps
+      - name: Add poetry to PATH
+        run: |
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      # 5. Install project dependencies using the lock file
+      - name: 📥 Install dependencies
+        run: |
+          # Assumes python-semantic-release is a dev dependency in pyproject.toml
+          poetry install --no-interaction --no-root
+
+      # 6. Execute semantic-release to perform the release
+      - name: 🚀 Execute Semantic Release
+        env:
+          GH_TOKEN: ${{ secrets.ADMIN_PAT }}  
+        run: | 
+          poetry run semantic-release -v version
+          poetry run semantic-release -v changelog
+          poetry run semantic-release -v publish

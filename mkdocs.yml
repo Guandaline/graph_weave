@@ -1,0 +1,80 @@
+# mkdocs.yml
+site_name: graph_weave Documentation
+site_description: Technical documentation for the graph_weave project.
+site_author: Valter Hugo Guandaline
+
+theme:
+  name: material # material mkdocs theme
+  # custom_dir: docs/theme/ # For future customizations
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: pink
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: lime
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.top
+    - navigation.sections
+    - toc.integrate
+    - content.code.copy
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/git-alt
+
+repo_url: https://github.com/Guandaline/graph_weave
+repo_name: graph_weave
+
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  version:
+    provider: mike
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Guandaline
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - footnotes
+
+plugins:
+  - search
+  - mermaid2
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_root_heading: yes
+            show_source: yes
+
+nav:
+  - '🏡 Home': 'index.md'
+  - '📁 Project Structure': 'structure.md'
+  - '🤝 Contribution': '.CONTRIBUTING.md'
+  - '✨ Core': 

@@ -1,0 +1,28 @@
+# This file configures Dependabot to automatically check for dependency updates.
+# It supports grouping, rebasing strategy, and per-ecosystem configuration.
+
+version: 2
+updates:
+  - package-ecosystem: "pip"  # For projects using Poetry or requirements.txt
+    directory: "/"            # Path to where pyproject.toml is located
+    schedule:
+      interval: "weekly"      # Options: "daily", "weekly", "monthly"
+    open-pull-requests-limit: 5  # Limit the number of open PRs at a time
+    rebase-strategy: "auto"      # Automatically rebase when conflicts arise
+    allow:
+      - dependency-type: "direct"   # Update direct dependencies
+      - dependency-type: "indirect" # Also allow updates to transitive dependencies
+    groups:
+      poetry-dependencies:
+        patterns:
+          - "*"  # Group all updates into a single PR
+
+  # --- GitHub Actions Dependencies ---
+  - package-ecosystem: "github-actions"  # Keeps GitHub Action versions up-to-date
+    directory: "/"                       # Path to .github/workflows/
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"  # Group all action updates into a single PR
