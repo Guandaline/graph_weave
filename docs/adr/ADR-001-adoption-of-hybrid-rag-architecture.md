@@ -1,6 +1,6 @@
-# ADR-087: Adoption of Hybrid RAG Architecture
+# ADR-001: Adoption of Hybrid RAG Architecture [fictitious]
 
-* **Status:** Proposed
+* **Status:** Accepted
 * **Date:** 2025-08-31
 
 ## Context
